@@ -16,6 +16,16 @@ const RoomSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  media: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "File",
+  },
+  messages: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Message",
+    },
+  ],
   createdAt: {
     type: Date,
     default: Date.now,

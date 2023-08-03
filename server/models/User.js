@@ -1,14 +1,21 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
-const UserSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    unique: true,
+const UserSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      unique: true,
+    },
+    name: { type: String },
+    password: { type: String },
+    avatar: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "File",
+    },
   },
-  name: { type: String },
-  password: { type: String },
-});
+  { versionKey: false }
+);
 
 UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
