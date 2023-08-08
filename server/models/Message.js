@@ -22,4 +22,4 @@ const MessageSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-module.exports = mongoose.Model("Message", MessageSchema);
+module.exports = mongoose.model("Message", MessageSchema);

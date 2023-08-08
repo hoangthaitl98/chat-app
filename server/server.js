@@ -7,6 +7,7 @@ const errorHandler = require("./middlewares/error");
 const path = require("path");
 const fileUpload = require("express-fileupload");
 const swagger = require("./utils/swagger");
+const io = require("./middlewares/socket-io");
 
 dotenv.config({ path: "./.env" });
 
@@ -30,11 +31,13 @@ const users = require("./routes/user");
 const auth = require("./routes/auth");
 const file = require("./routes/file");
 const room = require("./routes/room");
+const message = require("./routes/message");
 
 app.use("/api/v1/users", users);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/file", file);
 app.use("/api/v1/room", room);
+app.use("/api/v1/message", message);
 
 app.use(errorHandler);
 
@@ -47,7 +50,12 @@ const connectDB = async () => {
 
 connectDB();
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
   swagger(app, PORT);
 });
+
+io.connection(server);
+// setInterval(() => {
+//   io.on("send");
+// }, 2000);
