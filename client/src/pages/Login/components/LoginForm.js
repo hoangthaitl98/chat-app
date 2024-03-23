@@ -1,10 +1,29 @@
 import "./LoginForm.sass";
 import logo from "../../../assets/logo.png";
 import { useState } from "react";
+import { getMe, login } from "../../../api/login";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getUser } from "../../../redux/authSlice";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogin = async () => {
+    try {
+      const res = await login({ username, password });
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        const resUser = await getMe();
+        console.log(resUser);
+        dispatch(getUser(resUser.data.data));
+        navigate("/", { replace: true });
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="login-form">
@@ -33,7 +52,9 @@ const LoginForm = () => {
         <div className="bottom">
           <span>Register ?</span>
         </div>
-        <button className="submit-btn">Login</button>
+        <button className="submit-btn" onClick={handleLogin}>
+          Login
+        </button>
       </div>
     </div>
   );
